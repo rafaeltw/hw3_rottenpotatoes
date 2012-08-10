@@ -20,16 +20,28 @@ Background: movies have been added to database
   | Chicken Run             | G      | 21-Jun-2000  |
 
   And  I am on the RottenPotatoes home page
-  
+
 Scenario: restrict to movies with 'PG' or 'R' ratings
-  # enter step(s) to check the 'PG' and 'R' checkboxes
-  # enter step(s) to uncheck all other checkboxes
-  # enter step to "submit" the search form on the homepage
-  # enter step(s) to ensure that PG and R movies are visible
-  # enter step(s) to ensure that other movies are not visible
+	Given I check the following ratings: R, PG
+	Given I uncheck the following ratings: NC-17, G, PG-13
+	When I press "ratings_submit"
+	Then I should see "The Terminator"
+	And I should see "The Incredibles"
+	Then I should not see "Aladdin"
+	And I should not see "Chocolat"
 
 Scenario: no ratings selected
-  # see assignment
+  When I uncheck the following ratings: R, PG, NC-17, G, PG-13
+  When I press "ratings_submit"
+  Then I should not see "Aladdin"
+  And I should not see "Chocolat"
+  And I should not see "The Terminator"
+  And I should not see "The Incredibles"
 
 Scenario: all ratings selected
-  # see assignment
+  When I check the following ratings: R, PG, NC-17, G, PG-13
+  When I press "ratings_submit"
+  Then I should see "Aladdin"
+  And I should see "Chocolat"
+  And I should see "The Terminator"
+  And I should see "The Incredibles"
